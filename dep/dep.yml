@@ -1,34 +1,26 @@
-##kubectl apply -f dep.yml
-apiVersion: apps/v1 #this is the version of the api server
-kind: Deployment # we are creating an deployment 
-metadata: #using metada we are identifying the deployment 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   creationTimestamp: null
   labels:
-    app: my-first-deployment
-  name: my-first-deployment #this name block will create the deployment with this name 
-spec: #this is the specification of your deployment 
-  replicas: 2 #specification we are providing replicas 2
-  selector: #field defines how the created replica set find which pod to manage
-    matchLabels: #to do the same we define match label which is like an match express
-      app: my-first-deployment #all the labels are in key value format
+    app: my-nginx
+  name: my-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-nginx
   strategy: {}
-  template: #why you need an template
+  template:
     metadata:
       creationTimestamp: null
-      labels: 
-        app: my-first-deployment
-    spec: #this is the container specification
+      labels:
+        app: my-nginx
+    spec:
       containers:
       - image: nginx
         name: nginx
         ports:
-      resources:
-      limits: 
-        memory: "1Gi" #maximum number of container all together container can use 800Mi
-        cpu: "800m"
-      requests:
-        cpu: "400m" #every container should request 400m
-        memory: "700Mi"
         - containerPort: 80
         resources: {}
 status: {}

@@ -1,0 +1,10 @@
+#inside your configmap you can define an startup script. 
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config 
+data:
+  mysql_usermgmt.sql: |- #this will make line break  
+    DROP DATABASE IF EXISTS webappdb;
+    CREATE DATABASE webappdb;
+  

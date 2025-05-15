@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+spec:
+  selector:
+    matchLabels:
+      app: postgres
+  serviceName: postgres #kindly create the headless service first
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      initContainers:
+      - name: postgress-init
+        image: postgres
+        command: 
+        - bash
+        - -c
+        - |
+          set -ex
+            [[ `hostname` =~ -([0-9]+)$ ]] || exit 1
+            ordinal=${BASH_REMATCH[1]}
+            if [[ $ordinal -eq 0 ]]; then
+              printf "I am the primary"
+            else
+              printf "I am a read-only replica"
+            fi 
+      containers:
+      - name: postgres
+        image: postgres
+        ports:
+        - containerPort: 5432
+          name: web
+        env:
+          - name: POSTGRES_USER
+            value: postgres
+          - name: POSTGRES_PASSWORD
+            value: postgres
+        volumeMounts: #this is inisde your container
+        - name: www
+          mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+  - metadata:
+      name: www
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: local-path 
+      resources:
+        requests:
+          storage: 1Gi

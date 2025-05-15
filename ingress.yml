@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minimal-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /gift
+        pathType: Prefix
+        backend:
+          service:
+            name: giftservice
+            port:
+              number: 80
+      - path: /video
+        pathType: Prefix
+        backend:
+          service:
+            name: videoservice
+            port:
+              number: 80

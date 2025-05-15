@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: crm1
+  namespace: dev 
+  labels:
+    app: nginx 
+spec:
+  containers:
+  - name: nginx 
+    image: nginx 
+    resources:
+      limits: 
+        memory: "1Gi" #maximum number of container all together container can use 800Mi
+        cpu: "800m"
+      requests:
+        cpu: "400m" #every container should request 400m
+        memory: "700Mi"
+    ports:
+      - containerPort: 80

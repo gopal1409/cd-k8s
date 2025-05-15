@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-policy
+  namespace: crm
+spec:
+  podSelector: {} #means stop all the communcation for the pod inb this namespace
+    
+  policyTypes:
+  - Ingress
+  - Egress
+  egress:
+  - ports:
+      - port: 53
+        protocol: TCP
+      - port: 53
+        protocol: UDP

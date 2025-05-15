@@ -1,0 +1,13 @@
+apiVersion: v1 
+kind: ResourceQuota 
+metadata:
+  name: dev-quota 
+  namespace: dev 
+spec:
+  hard: 
+    requests.cpu: "1" #cpu request for all the pod in that namespace much not exceed 1 core
+    #in this particular namespace any pod cannot consume more thatn 1 core cpu
+    requests.memory: 1Gi 
+    limits.cpu: "2"
+    #inside the namespace max 2 core cpu is given
+    limits.memory: 2Gi

@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql #this is the name of the deployment
+spec: #specification of the deployment
+  selector:
+    matchLabels:
+      app: mysql 
+  template: #we are using deployment specification with template
+    metadata:
+      labels:
+        app: mysql 
+    spec: #this is the specifcaiton of your template
+      containers: #container block
+      - name: mysql 
+        image: mysql:5.6        
+        env: #will have environment variables
+          - name: MYSQL_ROOT_PASSWORD #this is got it from the ENV in docker file
+            valueFrom: 
+              secretKeyRef: #this is the place where we attache the secret manager of k8s
+                name: mysql-db-pass
+                key: password
+        ports:
+        - containerPort: 3306
+        #we need to add volumes to the container 
+        volumeMounts: #this portion is also inside the container block
+        - name: mysql-sc
+          mountPath: /var/lib/mysql #this is the path where the data will be stored
+        - name: mysql-config 
+          mountPath: /docker-entrypoint-initdb.d #this is the path where the data will be stored
+         
+      volumes: #the volume block 
+      - name: mysql-sc
+        persistentVolumeClaim:
+          claimName: task-pv-claim #this is the name of the persistent volume claim
+      - name: mysql-config
+        configMap:
+          name: mysql-config #this is the name of the config map
+          

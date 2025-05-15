@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: task-pv-volume
+spec:
+  capacity:
+    storage: 10Gi #this is an thin provisioing 
+  volumeMode: Filesystem #it will look for the particular file system
+  accessModes:
+    - ReadWriteOnce #readwritemany #read 
+  #persistentVolumeReclaimPolicy: Recycle 
+  #i delete the pod the data in the volume will be deleted 
+  #but the storage will not be delete 
+  storageClassName: slow
+  hostPath:
+    path: "/mnt/data" #this is the path where the data will be stored
